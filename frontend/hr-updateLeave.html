@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Updation Form for Leave</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: rgb(226, 240, 240);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            height: 80px;
+        }
+        header h1 {
+            margin: 0;
+            font-size:largest;
+        }
+        header nav a {
+            font-weight: bold;
+            text-decoration: none;
+            color: red;
+            margin-right: 50px;
+        }
+        main {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border-top: 1px solid #ccc;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin-left: 660px;">Update Leave</h1>
+        <nav>
+            <a href="hr's-operation.html">Home</a>
+        </nav>
+    </header>
+    <main>
+        <form id="leaveForm">
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div>
+                <label for="leave_id">Leave Id:</label>
+                <input type="text" id="leave_id" name="leave_id" placeholder="Enter Leave Id" required>
+            </div>
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div>
+                <label for="dept">Dept:</label>
+                <input type="text" id="dept" name="dept" placeholder="Enter your department" required>
+            </div>
+            <div>
+                <label for="date_of_leave">Date of Leave:</label>
+                <input type="date" id="date_of_leave" name="date_of_leave" required>
+            </div>
+            <div>
+                <label for="daysOnLeave">Days on Leave:</label>
+                <input type="number" id="daysOnLeave" name="daysOnLeave" required>
+            </div>
+            <div>
+                <label for="typeOfLeave">Type of Leave:</label>
+                <select id="typeOfLeave" name="typeOfLeave" required>
+                    <option value="comp_off">Comp-off</option>
+                    <option value="earned">Earned Leave</option>
+                    <option value="exigency">Exigency Leave</option>
+                    <option value="maternity_leave">Maternity Leave</option>
+                    <option value="outdoor_duty">Outdoor Duty</option>
+                    <option value="work_from_home">Work from home</option>
+                </select>
+            </div>
+            <input type="hidden" id="status" name="status" value="Pending">
+            <div>
+                <label for="reason">Reason:</label>
+                <input type="text" id="reason" name="reason" placeholder="Enter reason for leave (e.g., Fever)" required>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" id="submitBtn">Submit</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <p>&copy;2024. All rights reserved.</p>
+    </footer>
+    <script>
+        // Function to get a cookie value by name
+        function getCookieValue(cookieName) {
+            const name = cookieName + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return "";
+        }
+
+        // Populate fields on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('email').value = getCookieValue('email');
+            document.getElementById('leave_id').value = getCookieValue('leave_id');
+            document.getElementById('name').value = getCookieValue('name');
+            document.getElementById('dept').value = getCookieValue('dept');
+            document.getElementById('date_of_leave').value = getCookieValue('date_of_leave');
+            document.getElementById('daysOnLeave').value = getCookieValue('daysOnLeave');
+            document.getElementById('typeOfLeave').value = getCookieValue('typeOfLeave');
+            document.getElementById('reason').value = getCookieValue('reason');
+        });
+
+        // Submit button functionality
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            const leaveData = {
+                leave_id: document.getElementById('leave_id').value,
+                email: document.getElementById('email').value,
+                name: document.getElementById('name').value,
+                dept: document.getElementById('dept').value,
+                date_of_leave: document.getElementById('date_of_leave').value,
+                daysOnLeave: document.getElementById('daysOnLeave').value,
+                typeOfLeave: document.getElementById('typeOfLeave').value,
+                status: document.getElementById('status').value,
+                reason: document.getElementById('reason').value,
+            };
+
+            fetch('http://localhost:8080/updateLeaveRequest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(leaveData),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Leave application updated successfully!');
+                    window.location.href = "hr's-operation.html";
+                } else {
+                    alert('Failed to submit leave application.');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('An error occurred while submitting the leave application.');
+            });
+        });
+    </script>
+</body>
+</html>

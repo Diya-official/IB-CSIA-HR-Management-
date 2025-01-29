@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application for Leave</title>
+    <link rel="stylesheet" href="styling.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: rgb(226, 240, 240);
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+        main {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 10px;
+            background: color #333;
+            border-top: 1px solid #ccc;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Leave Application</h1>
+    </header>
+    <main>
+        <form id="leaveForm">
+            <!-- Email -->
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <!-- Name -->
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <!-- dept -->
+            <div>
+                <label for="dept">Dept:</label>
+                <input type="text" id="dept" name="dept" placeholder="Enter your department" required>
+            </div>
+            <!-- Date of Leave -->
+            <div>
+                <label for="date_of_leave">Date of Leave:</label>
+                <input type="date" id="date_of_leave" name="date_of_leave" required>
+            </div>
+            <!-- Days on Leave -->
+            <div>
+                <label for="daysOnLeave">Days on Leave:</label>
+                <input type="number" id="daysOnLeave" name="daysOnLeave" required>
+            </div>
+            <!-- Type of Leave -->
+            <div>
+                <label for="typeOfLeave">Type of Leave:</label>
+                <select id="typeOfLeave" name="typeOfLeave" required>
+                    <option value="comp_off">Comp-off</option>
+                    <option value="earned">Earned Leave</option>
+                    <option value="exigency">Exigency Leave</option>
+                    <option value="maternity_leave">Maternity Leave</option>
+                    <option value="outdoor_duty">Outdoor Duty</option>
+                    <option value="work_from_home">Work from home</option>
+                </select>
+            </div>
+            <!-- Status -->
+            <input type="hidden" id="status" name="status" value="Pending">
+            <!-- Reason -->
+            <div>
+                <label for="reason">Reason:</label>
+                <input type="text" id="reason" name="reason" placeholder="Enter reason for leave (e.g., Fever)" required>
+            </div>
+            <!-- Submit Button -->
+            <div style="text-align: center;">
+                <button type="button" id="submitBtn">Submit</button>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <p>&copy;2024 . All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            // Generate a random leave_id
+            const leave_id = 'L' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0'); 
+    
+            // Get form values
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const date_of_leave = document.getElementById('date_of_leave').value;
+            const typeOfLeave = document.getElementById('typeOfLeave').value;
+            const status = document.getElementById('status').value;
+            const reason = document.getElementById('reason').value;
+            const daysOnLeave = document.getElementById('daysOnLeave').value;
+            const dept = document.getElementById('dept').value;
+    
+            // Create JSON object
+            const leaveData = {
+                leave_id: leave_id, // Add the randomly generated leave_id
+                email: email,
+                name: name,
+                date_of_leave: date_of_leave,
+                typeOfLeave: typeOfLeave,
+                status: status,
+                reason: reason,
+                daysOnLeave: daysOnLeave,
+                dept: dept
+            };
+    
+            // Send JSON data via POST
+            fetch('http://localhost:8080/insertLeaves', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(leaveData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Leave application submitted successfully!');
+                window.location.href = 'faculty-index.html';
+            })
+            .catch(error => {
+                alert('Failed to submit leave application.');
+                console.error(error);
+            });
+        });
+    </script>
+    
+</body>
+</html>

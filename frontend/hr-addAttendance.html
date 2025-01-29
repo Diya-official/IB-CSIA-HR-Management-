@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Attendance</title>
+    <link rel="stylesheet" href="styling.css">
+</head>
+<body>
+    <header>
+        <h1 style="margin-left: 660px;">Attendance</h1>
+        <nav style="margin-left: 550px;">
+            <select id="navSelect">
+                <option value="hr's-operation.html">Home</option>
+                <option value="hr-addFaculty.html">Add Faculty</option>
+                <option value="hr-addHod.html">Add Hod</option>
+                <option value="index.html">Logout</option>
+            </select>
+        </nav>
+    </header>
+   
+    <main style="width: fit-content; height: fit-content; border-style: dotted; border-radius: 15px; border-color: grey; margin-top: 170px; margin-left: 570px; padding: 35px;">
+        <center>
+            <form method="post" target="_self" action="http://localhost:8080/uploadfile" enctype="multipart/form-data">
+                <input type="file" name="file" id="file">
+                <input type="submit" style="margin-top: 25px;">
+            </form>
+        </center>
+    </main>
+
+    <footer>
+        <p>&copy; 2024. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle navigation
+        document.getElementById('navSelect').addEventListener('change', function () {
+            const selectedValue = this.value;
+            if (selectedValue) {
+                window.location.href = selectedValue;
+            }
+        });
+    </script>
+</body>
+</html>

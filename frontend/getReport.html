@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Record</title>
+    <link rel="stylesheet" href="styling.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            text-align: center;
+            padding: 10px 0;
+            background-color:  rgb(226, 240, 240); /* Ensures it keeps its original color */
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .content {
+            margin-top: 80px; /* Adjusts for fixed header height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .card input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .card button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header><h1 style="margin-left: 500px;">Get Record</h1>
+    
+    <nav >
+        <a href="hr's-operation.html">Home</a>
+        <a href="index.html">Logout</a>
+        
+
+        </nav>
+    </header>
+
+    <div class="content">
+        <div class="card" style="padding: 40px;margin-top:20px;">
+            <h2>Download Record</h2>
+            <form id="getRecordForm" action="http://localhost:8080/getRecord" method="get">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <button type="submit" style="width: max-content;">Download</button>
+            </form>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2024. All rights reserved.</p></footer>
+</body>
+</html>

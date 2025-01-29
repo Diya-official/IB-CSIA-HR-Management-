@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve or Reject Leave Request</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        header {
+            background-color: rgb(226, 240, 240);
+            color: black;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: red;
+            margin: 0 10px;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            color: darkred;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .request-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btns button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .accept-btn {
+            background-color: green;
+            color: white;
+        }
+
+        .reject-btn {
+            background-color: red;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Leave Requests</h1>
+        <nav>
+            <a href="index.html">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="request-container">
+            <h2>Pending Leave Requests</h2>
+            <table id="leaveTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Leave</th>
+                        <th>Days on Leave</th>
+                        <th>Type of Leave</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy;2024 All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                // Retrieve email and department from cookies
+                const emailCookie = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('email='))?.split('=')[1];
+        
+                const deptCookie = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('dept='))?.split('=')[1];
+        
+                if (!emailCookie || !deptCookie) {
+                    alert('Required cookies not found. Please log in again.');
+                    window.location.href = 'index.html'; // Redirect to the login page
+                    return;
+                }
+        
+                const email = decodeURIComponent(emailCookie);
+                const dept = decodeURIComponent(deptCookie);
+        
+                const url = `http://localhost:8080/GetAllLeaves`;
+        
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+        
+                const leaveRecords = await response.json();
+                const tbody = document.querySelector('#leaveTable tbody');
+        
+                // Filter records by department and pending status
+                const pendingRequests = leaveRecords.filter(
+                    record => record.status === 'Pending' && record.dept === dept
+                );
+        
+                if (pendingRequests.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="6">No pending leave requests for your department</td>`;
+                    tbody.appendChild(row);
+                } else {
+                    pendingRequests.forEach(record => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${record.name || 'N/A'}</td>
+                            <td>${record.date_of_leave || 'N/A'}</td>
+                            <td>${record.daysOnLeave || 0}</td>
+                            <td>${record.typeOfLeave || 'N/A'}</td>
+                            <td>${record.status || 'Pending'}</td>
+                            <td class="action-btns">
+                                <button class="accept-btn" onclick='processLeave(${JSON.stringify(record)}, "Accepted")'>Accept</button>
+                                <button class="reject-btn" onclick='processLeave(${JSON.stringify(record)}, "Rejected")'>Reject</button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching leave status:', error);
+                alert('Failed to load leave records. Please try again later.');
+            }
+        });
+    
+        // Function to process leave approval or rejection
+        async function processLeave(leaveData, action) {
+            try {
+                if (!leaveData || !leaveData.leave_id) {
+                    alert('Invalid leave data. Cannot process the request.');
+                    return;
+                }
+        
+                const payload = {
+                    leave_id: leaveData.leave_id, // Include the leave_id to identify the record
+                    email: leaveData.email,
+                    name: leaveData.name || 'Unknown',
+                    date_of_leave: leaveData.date_of_leave || 'N/A',
+                    typeOfLeave: leaveData.typeOfLeave || 'General',
+                    status: action, // 'Accepted' or 'Rejected'
+                    reason: leaveData.reason || 'No reason provided',
+                    daysOnLeave: leaveData.daysOnLeave || 0
+                };
+        
+                const response = await fetch('http://localhost:8080/updateLeaveRequest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+        
+                if (response.ok) {
+                    alert(`Leave request ${action.toLowerCase()}!`);
+                    location.reload(); // Reload the page to update the leave table
+                } else {
+                    throw new Error('Failed to update leave status');
+                }
+            } catch (error) {
+                console.error(`Error processing leave request (${action}):`, error);
+                alert(`Failed to ${action.toLowerCase()} leave request`);
+            }
+        }
+    </script>
+    
+    
+</body>
+</html>

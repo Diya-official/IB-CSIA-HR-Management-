@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert Leaves</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        header, footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: #fff;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        header {
+            background-color: rgb(226, 240, 240);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Assign Leave</h1>
+        <nav>
+
+            <a href="hr's-operation.html" style="margin-right: 40px;">Home</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="card">
+            <h2>Leave Details</h2>
+            <form id="leaveForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="Exigency">Exigency</label>
+                    <input type="number" id="Exigency" name="Exigency" required>
+                </div>
+                <div class="form-group">
+                    <label for="Earned">Earned</label>
+                    <input type="number" id="Earned" name="Earned" required>
+                </div>
+                <div class="form-group">
+                    <label for="Work_From_Home">Work From Home</label>
+                    <input type="number" id="Work_From_Home" name="Work_From_Home" required>
+                </div>
+                <div class="form-group">
+                    <label for="Comp_off">Comp Off</label>
+                    <input type="number" id="Comp_off" name="Comp_off" required>
+                </div>
+                <div class="form-group">
+                    <label for="Outdoor_Duty">Outdoor Duty</label>
+                    <input type="number" id="Outdoor_Duty" name="Outdoor_Duty" required>
+                </div>
+                <div class="form-group">
+                    <label for="Maternity_Leave">Maternity Leave</label>
+                    <input type="number" id="Maternity_Leave" name="Maternity_Leave" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('leaveForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = key === 'email' || key === 'name' ? value : parseInt(value, 10);
+            });
+
+            fetch('http://localhost:8080/insertLeaveRecord', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(result => {
+                alert('Leave record submitted successfully!');
+            })
+            .catch(error => {
+                console.error('There was an error:', error);
+                alert('Failed to submit leave record.');
+            });
+        });
+    </script>
+</body>
+</html>

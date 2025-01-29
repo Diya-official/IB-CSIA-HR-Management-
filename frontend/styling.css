@@ -1,0 +1,175 @@
+/* General body styles */
+body {
+    margin: 0px; 
+    padding: 0px;
+    font-family: Arial, sans-serif; /* Adding a default font for the body */
+}
+
+/* Header Styling */
+header {
+    width: 100%;
+    height: 90px;
+    background-color: rgb(226, 240, 240);
+    margin: 0px;
+    display: flex;
+    justify-content: center; /* Horizontally center the content */
+    align-items: center; /* Vertically center the content */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Box shadow effect */
+}
+
+header h1 {
+    font-size: 35px; /* Increase font size */
+    font-weight: bold; /* Make font bold */
+    color: rgb(18, 16, 16); /* Set text color to white for contrast */
+    margin: 0; /* Remove any default margin for better alignment */
+}
+
+/* Card Styling */
+.card {
+    width: 60%; /* Increased the width for better display */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-top: 100px; /* Adjust top margin to center card */
+    margin-bottom: 50px; /* Optional: Add margin for bottom spacing */
+    border-radius: 15px;
+    padding: 20px;
+    background-color: rgb(226, 240, 240); /* White background for better contrast */
+}
+
+/* Form Styling */
+fieldset {
+    border-style: none; /* Remove default border */
+}
+
+input[type="email"],
+input[type="password"],
+input[type="submit"],
+input[type="text"] {
+    width: 90%; /* Full width */
+    padding: 10px; /* Padding for comfort */
+    margin: 10px 0; /* Vertical margin between inputs */
+    border-radius: 10px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light border color */
+    font-size: 16px; /* Increase font size for readability */
+}
+
+/* Submit Button Styling */
+input[type="submit"] {
+    background-color: rgb(229, 28, 28); /* Red background for submit */
+    color: white;
+    height: 40px;
+    font-weight: bold;
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+input[type="submit"]:hover {
+    background-color: rgb(198, 22, 22); /* Darker red when hovered */
+}
+
+/* Footer Styling */
+footer {
+    width: 100%;
+    text-align: center;
+    background-color: #333; /* Dark background for footer */
+    color: white; /* White text color */
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    font-size: 14px; /* Smaller font size for footer text */
+    margin: 0; /* Ensure no margin */
+}
+
+header nav{
+
+    margin-left: 350px;
+    font-size:large;
+    padding: 10px;
+
+}
+
+
+nav a{
+    color: rgb(133, 3, 3);
+    text-decoration: none;
+    margin: 9px;
+}
+
+
+/* Responsive Design: For smaller screens */
+@media (max-width: 768px) {
+    .card {
+        width: 80%; /* Increase card width on smaller screens */
+        margin-top: 60px; /* Adjust margin */
+    }
+
+    header h1 {
+        font-size: 36px; /* Smaller font size for smaller screens */
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="submit"] {
+        font-size: 14px; /* Adjust font size for inputs on smaller screens */
+    }
+}
+
+/* Button Styling for HOD, HR, and Faculty (inline display) */
+button {
+    display: inline-block; /* Display buttons inline */
+    width: 20%; /* Reduced the width to 20% */
+    height: 50px; /* Set consistent height for buttons */
+    margin: 10px 1%; /* Add space between buttons */
+    font-size: 16px; /* Set font size */
+    border-radius: 10px; /* Rounded corners for buttons */
+    color: white; /* Text color */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Pointer on hover */
+    border: none; /* Remove border */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+/* HOD Button */
+#hod {
+    background-color: rgb(62, 62, 229); /* Blue background for HOD */
+}
+
+#hod:hover {
+    background-color: rgb(42, 42, 170); /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* HR Button */
+#hr {
+    background-color: red; /* Red background for HR */
+}
+
+#hr:hover {
+    background-color: rgb(198, 22, 22); /* Darker red on hover */
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Faculty Button */
+#faculty {
+    background-color: rgb(207, 207, 25); /* Yellow background for Faculty */
+}
+
+#faculty:hover {
+    background-color: rgb(174, 174, 22); /* Darker yellow on hover */
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+nav select{
+
+    border-radius: 10px;
+    background-color: inherit;
+    list-style: circle;
+    border-style: none;
+    color:rgb(198, 22, 22);
+    font-size: large;
+    
+}
+
+nav select option{
+    background-color: inherit;
+}

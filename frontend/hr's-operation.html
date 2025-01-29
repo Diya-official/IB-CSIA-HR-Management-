@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Operation Page</title>
+    <link rel="stylesheet" href="styling.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: px; /* Space below fixed header */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+        }
+
+        .card h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+
+        .card button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            width: max-content;
+        }
+
+        .card button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin-left: 590px;">ADMIN</h1>
+        <nav>
+            <a href="index.html" style="font-weight:bold;margin-left:150px">Logout</a>
+        </nav>
+    </header>
+
+    <div class="container" > 
+        <div class="card">
+            <h3>Add HOD</h3>
+            <button onclick="toHod()">Perform</button>
+        </div>
+        <div class="card">
+            <h3>Add Faculty</h3>
+            <button onclick="toFaculty()">Perform</button>
+        </div>
+        <div class="card">
+            <h3>Delete HOD and Faculty</h3>
+            <button onclick="toDelete()">Perform</button>
+        </div>
+        <div class="card">
+            <h3>Get Report</h3>
+            <button onclick="toReport()">Perform</button>
+        </div>
+        <div class="card" style="margin-top: 2px;">
+            <h3>Check and Update Leaves</h3>
+            <button onclick="toCheckLeaves()">Perform</button>
+        </div>
+        <div class="card" style="margin-top: 2px;">
+            <h3>Get Overall Report</h3>
+            <button onclick="toUpdateLeaves()">Perform</button>
+        </div>
+        <div class="card" style="margin-top: 2px;">
+            <h3>Insert Leaves Available</h3>
+            <button onclick="toLeaveRecord()">Perform</button>
+        </div>
+
+    </div>
+
+    <footer><p>&copy;2024. All rights reserved. </p></footer>
+
+    <script>
+        
+        function toLeaveRecord(){
+            window.location.href="hr-addLeaveRecord.html";
+        }
+
+        function toHod() {
+            window.location.href = "hr-addHod.html";
+        }
+
+        function toFaculty() {
+            window.location.href = "hr-addFaculty.html";
+        }
+
+        function toDelete() {
+            window.location.href = "hr-remove-faculty-hod.html";
+        }
+
+        function toReport() {
+            window.location.href = "getReport.html";
+        }
+
+        function toCheckLeaves() {
+            window.location.href = "hr-fetchLeaves.html";
+        }
+
+        function toUpdateLeaves() {
+            window.location.href = "hr-addAttendance.html";
+        }
+    </script>
+</body>
+</html>

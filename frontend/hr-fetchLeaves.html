@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave List</title>
+    <link rel="stylesheet" href="styling.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            background-color: rgb(226, 240, 240); /* Adjust to match your theme */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            margin-bottom: 60px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        
+            .action-button {
+                color: red;
+                background: none; /* Optional: Remove default button styling */
+                border: none;
+                cursor: pointer;
+                font-size: 14px; /* Adjust size if needed */
+                text-decoration: none; /* Optional: Make it look like a link */
+            }
+        
+            .action-button:hover {
+                text-decoration: none; /* Optional: Change styling on hover */
+                color: blue;
+            }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin-left: 590px">Leaves</h1>
+        <nav>
+            <a href="hr's-operation.html" style="font-weight: bold; margin-left: 60px">Home</a>
+            <a href="index.html" style="font-weight: bold;">Logout</a>
+        </nav>
+    </header>
+    
+    <main style="margin-top: 100px;">
+        <table id="leaveTable" style="margin-bottom: 100px;">
+            <thead>
+                <tr>
+                    <th>Leave ID</th>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Date of Leave</th>
+                    <th>Type of Leave</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Days on Leave</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically added here -->
+            </tbody>
+        </table>
+    </main>
+    
+    <footer style="margin-top: 170px;">
+        <p>&copy; 2024. All rights reserved</p>
+    </footer>
+
+    <script>
+        async function fetchLeaves() {
+            try {
+                const response = await fetch('http://localhost:8080/GetAllLeaves', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const tbody = document.querySelector('#leaveTable tbody');
+
+                    data.forEach(leave => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${leave.leave_id}</td>
+                            <td>${leave.email}</td>
+                            <td>${leave.name}</td>
+                            <td>${leave.date_of_leave}</td>
+                            <td>${leave.typeOfLeave}</td>
+                            <td>${leave.status}</td>
+                            <td>${leave.reason}</td>
+                            <td>${leave.daysOnLeave}</td>
+                            <td>${leave.dept}</td>
+                            <td><button class="action-button">Update</button></td>
+                        `;
+
+                        const button = row.querySelector('.action-button');
+                        button.addEventListener('click', () => {
+                            document.cookie = `leave_id=${leave.leave_id}; path=/`;
+                            document.cookie = `email=${leave.email}; path=/`;
+                            document.cookie = `name=${leave.name}; path=/`;
+                            document.cookie = `date_of_leave=${leave.date_of_leave}; path=/`;
+                            document.cookie = `typeOfLeave=${leave.typeOfLeave}; path=/`;
+                            document.cookie = `status=${leave.status}; path=/`;
+                            document.cookie = `reason=${leave.reason}; path=/`;
+                            document.cookie = `daysOnLeave=${leave.daysOnLeave}; path=/`;
+                            document.cookie = `dept=${leave.dept}; path=/`;
+
+                            window.location.href = 'hr-updateLeave.html';
+                        });
+
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    console.error('Failed to fetch leave data.');
+                    alert('Failed to load data. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching the data.');
+            }
+        }
+
+        // Fetch data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchLeaves);
+    </script>
+</body>
+</html>

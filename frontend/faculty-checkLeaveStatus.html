@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Leave Status</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        header {
+            background-color: rgb(226, 240, 240);
+            color: black;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            height:80px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: red;
+            margin: 0 10px;
+            font-size: large;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            color: darkred;
+        }
+
+        /* Main Content */
+        main {
+            padding: 20px;
+        }
+
+        .leave-status-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .leave-status-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="margin-top: 20px;">Leave Status</h1>
+        <nav style="margin-top: 25px;">
+            <a href="index.html">Logout</a>
+            <a href="faculty-index.html">Home</a>
+            <a href="faculty-leaveApplication.html">Leave Application</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="leave-status-container">
+            <h2>Your Leave Records</h2>
+            <table id="leaveTable">
+                <thead>
+                    <tr>
+                        <th>Date of Leave</th>
+                        <th>Days on Leave</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy;2024 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                // Retrieve email from cookies
+                const emailCookie = document.cookie
+                    .split('; ')
+                    .find(row => row.startsWith('email='))?.split('=')[1];
+    
+                if (!emailCookie) {
+                    alert('No email found in cookies. Please log in again.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+    
+                const email = decodeURIComponent(emailCookie);
+    
+                // Send a POST request to fetch all leave records
+                const url = 'http://localhost:8080/GetAllLeaves';
+    
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email }) // Send email in the request body
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const leaveRecords = await response.json();
+    
+                console.log('Backend response:', leaveRecords); // Debug log
+    
+                const tbody = document.querySelector('#leaveTable tbody');
+    
+                // Filter the leave records by the email
+                const userLeaveRecords = leaveRecords.filter(record => record.email === email);
+    
+                // Populate the table with user-specific leave records
+                if (userLeaveRecords.length > 0) {
+                    userLeaveRecords.forEach(record => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${record.date_of_leave}</td>
+                            <td>${record.daysOnLeave}</td>
+                            <td>${record.status}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    // If no leave records are found for the user, show a message
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="3">No leave records found for this email</td>`;
+                    tbody.appendChild(row);
+                }
+            } catch (error) {
+                console.error('Error fetching leave status:', error);
+                alert('Failed to load leave records. Please try again later.');
+            }
+        });
+    </script>
+</body>
+</html>
